@@ -40,13 +40,14 @@ class PurchaseOrderController extends Controller
 
     public function getPurchaseOrderLineCreate()
     {
-        $purchaseOrderLines = PurchaseOrderLine::paginate(10);
-        return view('admin.purchaseOrderLines.create', ["purchaseOrderLines" => $purchaseOrderLines]);
+        $products = Product::all();
+        return view('admin.purchaseOrderLines.create', ["products" => $products]);
     }
 
     public function postPurchaseOrderLineInsert(Request $request, PurchaseOrderLine $purchaseOrderLine)
     {
         $validator = Validator::make($request->all(), [
+            'product' => 'required',
             'qty' => 'required',
             'price' => 'required',
             'discount' => 'required',
@@ -54,10 +55,12 @@ class PurchaseOrderController extends Controller
 
         if ($validator->fails()) return redirect()->back()->withErrors($validator->errors());
 
+        $product = $request->post('product');
         $qty = $request->post('qty');
         $price = $request->post('price');
         $discount = $request->post('discount');
 
+        $purchaseOrderLine->product_id = $product;
         $purchaseOrderLine->qty = $qty;
         $purchaseOrderLine->price = $price;
         $purchaseOrderLine->discount = $discount;

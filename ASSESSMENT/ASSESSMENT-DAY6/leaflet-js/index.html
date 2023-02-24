@@ -1,0 +1,48 @@
+<html>
+	<head>
+		<title>Belajar LeafletJS</title>
+		<link
+			rel="stylesheet"
+			href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+			integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+			crossorigin=""
+		/>
+		<script
+			src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+			integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+			crossorigin=""
+		></script>
+		<style type="text/css">
+			body {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			#map {
+				height: 500px;
+				width: 750px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="map"></div>
+		<script type="text/javascript">
+			const map = L.map("map").setView(
+				[-6.9346023932115095, 107.60492304971652],
+				15
+			);
+			const popup = L.popup()
+				.setLatLng([-6.9346023932115095, 107.60492304971652])
+				.setContent("Lapang Tegalega Kota Bandung")
+				.openOn(map);
+
+			L.tileLayer(
+				"https://api.maptiler.com/maps/basic-v2/{z}/{x}/{y}.png?key=PvVYH0WrsmwVhMShJUUQ",
+				{
+					attribution:
+						'<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
+				}
+			).addTo(map);
+		</script>
+	</body>
+</html>

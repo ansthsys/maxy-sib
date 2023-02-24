@@ -1,0 +1,37 @@
+<html>
+	<head>
+		<title>Belajar jQuery</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function () {
+				$("#buttonPertama").click(function (event) {
+					alert("Button pertama berhasil di click");
+				});
+
+				$(".buttonKedua").click(function (event) {
+					alert("Button kedua berhasil di click");
+				});
+
+				$("#inputPertama").change(function(event) {
+					console.log(event.target.value) // log value using event target
+					console.log($("#inputPertama").val()) // log value using jQuery
+
+					// Input value kedua from value pertama
+					$("#inputKedua").val($("#inputPertama").val())
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Halaman Belajar jQuery</h1>
+		<button id="buttonPertama">Klik!!!</button>
+		<button class="buttonKedua">Tombol Kedua</button>
+		<hr />
+		<form>
+			<label for="inputPertama">Input Pertama</label><br />
+			<input type="text" id="inputPertama" name="inputPertama" /><br />
+			<label for="inputKedua">Input Kedua</label><br />
+			<input type="text" id="inputKedua" name="inputKedua" /><br />
+		</form>
+	</body>
+</html>

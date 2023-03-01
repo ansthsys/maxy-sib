@@ -71,7 +71,7 @@ class RegisterController extends Controller
      * @param  array $data
      * @return User|\Illuminate\Database\Eloquent\Model
      */
-    protected function create(array $data)
+    protected function create(array $data, $google2fa_secret)
     {
         /** @var  $user User */
         $user = User::create([
@@ -79,7 +79,8 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'confirmation_code' => Uuid::uuid4(),
-            'confirmed' => false
+            'confirmed' => false,
+            'google2fa_secret' => $google2fa_secret,
         ]);
 
         if (config('auth.users.default_role')) {
@@ -99,12 +100,27 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
 
-        event(new Registered($user = $this->create($request->all())));
+        $google2fa = app('pragmarx.google2fa');
 
-        $this->guard()->login($user);
+        $registration_data = $request->all();
 
-        return $this->registered($request, $user)
-            ?: redirect($this->redirectPath());
+        $registration_data["google2fa_secret"] = $google2fa->generateSecretKey();
+
+        $this->create($request->all(), $registration_data["google2fa_secret"]);
+        // $this->create($request->all());
+
+        $request->session()->flash('registration_data', $registration_data);
+
+        $QR_IMAGE = $google2fa->getQRCodeInline(
+            config('app.name'),
+            $registration_data["email"],
+            $registration_data["google2fa_secret"],
+        );
+
+        return view('google2fa.register', [
+            'QR_IMAGE' => $QR_IMAGE,
+            'secret' => $registration_data['google2fa_secret']
+        ]);
     }
 
     /**

@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->boolean('confirmed')->default(config('access.users.confirm_email') ? false : true);
             $table->rememberToken();
             $table->timestamp('email_verified_at')->nullable();
+            $table->text('google2fa_secret')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -2,6 +2,7 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -116,6 +117,27 @@ $router->group(['prefix' => 'penjualan'], function () use ($router) {
             'message' => "Success confirmed",
             'error' => false,
             'user' => $user,
+        ]);
+    });
+
+    $router->post('/{id}/sendmail', function (Request $req, $id) {
+        $body = $req->body;
+
+        if (!$body) {
+            return response()->json([
+                'message' => "Email body is required",
+                'error' => true,
+            ], 400);
+        }
+
+        Mail::raw("$body", function ($message) {
+            $message->to("azmiythufail91@gmail.com")
+                ->subject('Lumen - Maxy Academy');
+        });
+
+        return response()->json([
+            'message' => "Email sent successfully to id: $id",
+            'error' => false,
         ]);
     });
 });

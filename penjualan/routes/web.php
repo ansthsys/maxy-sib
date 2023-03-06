@@ -100,4 +100,22 @@ $router->group(['prefix' => 'penjualan'], function () use ($router) {
             'error' => false,
         ]);
     });
+
+    $router->get('/{id}/confirm', function (Request $req, $id) {
+        $user = $req->user();
+
+        if ($user == null) {
+            return response()->json([
+                "message" => "Unauthorize",
+                "error" => true,
+                "user" => $user,
+            ], 401);
+        }
+
+        return response()->json([
+            'message' => "Success confirmed",
+            'error' => false,
+            'user' => $user,
+        ]);
+    });
 });
